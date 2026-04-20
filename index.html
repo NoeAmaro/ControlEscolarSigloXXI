@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control Escolar · Iniciar Sesión</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0f14;--surface:#13181f;--surface2:#1a2030;
+  --border:#2a3444;--border2:#364050;
+  --accent:#00d4a8;--accent2:#4d9fff;
+  --danger:#ff5f7e;
+  --text:#dce8f5;--text2:#7a90a8;--text3:#3e5060;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden}
+
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:52px 52px;opacity:.25;pointer-events:none}
+.bg-glow-top{position:fixed;top:-180px;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(0,212,168,.1) 0%,transparent 68%);pointer-events:none}
+.bg-glow-bot{position:fixed;bottom:-200px;right:-100px;width:600px;height:500px;background:radial-gradient(ellipse,rgba(77,159,255,.07) 0%,transparent 68%);pointer-events:none}
+
+.card{position:relative;z-index:1;background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:48px 52px;width:440px;max-width:95vw;box-shadow:0 28px 70px rgba(0,0,0,.65);animation:slideUp .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+.logo-wrap{display:flex;align-items:center;gap:14px;margin-bottom:38px}
+.logo-icon{width:50px;height:50px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 28px rgba(0,212,168,.35)}
+.logo-name{font-size:18px;font-weight:800}
+.logo-sub{font-size:11px;color:var(--text2);font-weight:400;margin-top:2px}
+
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.field label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em}
+.inp-wrap{position:relative}
+.inp-ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;line-height:1}
+.inp-wrap input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:13px 46px 13px 46px;border-radius:11px;font-size:14px;font-family:'Sora';transition:border .2s,box-shadow .2s}
+.inp-wrap input::placeholder{color:var(--text3)}
+.inp-wrap input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,168,.13)}
+
+.eye-btn{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);transition:color .15s;padding:2px}
+.eye-btn:hover{color:var(--text2)}
+
+.err{font-size:12px;color:var(--danger);background:rgba(255,95,126,.08);border:1px solid rgba(255,95,126,.22);border-radius:9px;padding:10px 14px;margin-bottom:18px;display:none;animation:shake .28s ease}
+.err.show{display:block}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+.btn-login{width:100%;padding:14px;border-radius:11px;background:var(--accent);color:#000;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'Sora';transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-login:hover{background:#00f0c0;box-shadow:0 0 30px rgba(0,212,168,.45);transform:translateY(-1px)}
+.btn-login:active{transform:translateY(0)}
+
+.card-footer{margin-top:30px;text-align:center;font-size:11px;color:var(--text3);line-height:1.9}
+.card-footer span{font-family:'JetBrains Mono';font-weight:700;color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow-top"></div>
+<div class="bg-glow-bot"></div>
+
+<div class="card">
+  <div class="logo-wrap">
+    <div class="logo-icon">📚</div>
+    <div>
+      <div class="logo-name">Control Escolar</div>
+      <div class="logo-sub">Siglo XXI · Bachillerato</div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Usuario</label>
+    <div class="inp-wrap">
+      <span class="inp-ico">👤</span>
+      <input type="text" id="inp-user" placeholder="Escribe tu usuario"
+        autocomplete="username" onkeydown="if(event.key==='Enter')login()"/>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Contraseña</label>
+    <div class="inp-wrap">
+      <span class="inp-ico">🔒</span>
+      <input type="password" id="inp-pass" placeholder="Escribe tu contraseña"
+        autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/>
+      <button class="eye-btn" id="eye-btn" onclick="togglePass()">👁</button>
+    </div>
+  </div>
+
+  <div class="err" id="err-msg">⚠️ Usuario o contraseña incorrectos. Inténtalo de nuevo.</div>
+
+  <button class="btn-login" onclick="login()">Entrar al sistema &nbsp;→</button>
+
+  <div class="card-footer">
+    Sistema de Control Escolar &nbsp;·&nbsp; Ciclo <span>2024–2025</span><br>
+    NoeAmaro / ControlEscolarSigloXXI
+  </div>
+</div>
+
+<script>
+const USERS = {
+  JAN: { pass: '2325', home: 'InicioENE.html' }
+};
+
+function login(){
+  const user = document.getElementById('inp-user').value.trim();
+  const pass = document.getElementById('inp-pass').value;
+  const err  = document.getElementById('err-msg');
+  if(USERS[user] && USERS[user].pass === pass){
+    err.classList.remove('show');
+    sessionStorage.setItem('ce_user', user);
+    window.location.href = USERS[user].home;
+  } else {
+    err.classList.remove('show');
+    void err.offsetWidth; // reinicia animación
+    err.classList.add('show');
+    document.getElementById('inp-pass').value = '';
+    document.getElementById('inp-pass').focus();
+  }
+}
+
+function togglePass(){
+  const inp = document.getElementById('inp-pass');
+  const btn = document.getElementById('eye-btn');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+window.onload = () => document.getElementById('inp-user').focus();
+</script>
+</body>
+</html>
