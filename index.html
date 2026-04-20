@@ -141,14 +141,15 @@
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
             
-            // CREDENCIALES DE PRUEBA (cámbialas después)
+            // CREDENCIALES DE PRUEBA
             if (username === 'admin' && password === '1234') {
-                // Login exitoso - redirige a la página principal
+                // Guardar sesión
+                sessionStorage.setItem('ce_user', username);
+                sessionStorage.setItem('ce_nombre', 'Administrador');
+                // Redirigir a la página principal
                 window.location.href = 'InicioENE.html';
             } else {
-                // Login fallido
                 errorDiv.style.display = 'block';
-                // Ocultar mensaje después de 3 segundos
                 setTimeout(() => {
                     errorDiv.style.display = 'none';
                 }, 3000);
